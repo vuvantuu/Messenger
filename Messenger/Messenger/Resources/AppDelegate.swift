@@ -7,13 +7,20 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+       func application(application: UIApplication, willChangeStatusBarFrame newStatusBarFrame: CGRect) {
+        let windows = UIApplication.shared.windows
 
-
+        for window in windows {
+            window.removeConstraints(window.constraints)
+        }
+    }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
         // Override point for customization after application launch.
         return true
     }
