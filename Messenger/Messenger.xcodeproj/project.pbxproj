@@ -21,6 +21,7 @@
 		904E889C24F11B270075D151 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904E889B24F11B270075D151 /* LoginViewController.swift */; };
 		904E88A024F14A100075D151 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904E889F24F14A100075D151 /* Extensions.swift */; };
 		9052C59C24F258B500C76E08 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9052C59B24F258B500C76E08 /* GoogleService-Info.plist */; };
+		9052C5A224F36BCD00C76E08 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9052C5A124F36BCD00C76E08 /* DatabaseManager.swift */; };
 		98BC782C973DF6096EC5199B /* Pods_Messenger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 142E6D69B50BF87B651AC6AC /* Pods_Messenger.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		904E889F24F14A100075D151 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9052C59B24F258B500C76E08 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9052C59D24F2824000C76E08 /* Messenger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Messenger.entitlements; sourceTree = "<group>"; };
+		9052C5A124F36BCD00C76E08 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 				904E887324F1056A0075D151 /* AppDelegate.swift */,
 				904E887524F1056A0075D151 /* SceneDelegate.swift */,
 				904E889F24F14A100075D151 /* Extensions.swift */,
+				9052C5A124F36BCD00C76E08 /* DatabaseManager.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				904E889C24F11B270075D151 /* LoginViewController.swift in Sources */,
+				9052C5A224F36BCD00C76E08 /* DatabaseManager.swift in Sources */,
 				904E889124F113AF0075D151 /* RegisterController.swift in Sources */,
 				904E889724F117210075D151 /* NewConversationViewController.swift in Sources */,
 				904E889324F114610075D151 /* PhotoViewerController.swift in Sources */,
@@ -443,6 +447,7 @@
 			baseConfigurationReference = 8873C80E525728A4A207F7F8 /* Pods-Messenger.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = Yes;
 				CODE_SIGN_ENTITLEMENTS = Messenger/Messenger.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6XZR5LMR6X;
@@ -464,6 +469,7 @@
 			baseConfigurationReference = 87B0ECF9E474F93AD31CB0F3 /* Pods-Messenger.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = Yes;
 				CODE_SIGN_ENTITLEMENTS = Messenger/Messenger.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6XZR5LMR6X;

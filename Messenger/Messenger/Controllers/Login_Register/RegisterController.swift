@@ -31,7 +31,7 @@ class RegisterController: UIViewController {
     }()
     private let imageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(systemName: "person")
+        iv.image = UIImage(systemName: "person.circle")
         iv.tintColor = .gray
         iv.contentMode = .scaleAspectFit
         iv.layer.masksToBounds = true
@@ -146,40 +146,55 @@ class RegisterController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     @objc func logBtnTap(){
-         emailField.resignFirstResponder()
-               passField.resignFirstResponder()
-               firstName.resignFirstResponder()
-               lastName.resignFirstResponder()
-
-               guard let firstName = firstName.text,
-                let lastName = lastName.text,
-                   let email = emailField.text,
-                   let password = passField.text,
-                   !email.isEmpty,
-                   !password.isEmpty,
-                   !firstName.isEmpty,
-                   !lastName.isEmpty,
-                   password.count >= 6 else {
-                       alertLoginError()
-                       return
-               }
+        emailField.resignFirstResponder()
+        passField.resignFirstResponder()
+        firstName.resignFirstResponder()
+        lastName.resignFirstResponder()
+        
+        guard let firstName = firstName.text,
+            let lastName = lastName.text,
+            let email = emailField.text,
+            let password = passField.text,
+            !email.isEmpty,
+            !password.isEmpty,
+            !firstName.isEmpty,
+            !lastName.isEmpty,
+            password.count >= 6 else {
+                alertLoginError()
+                return
+        }
         //Firebase register
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
-            guard let authResult != nil, error == nil else {
-                           print("Error cureating user", error)
-                           return
-                       }
-
-                       UserDefaults.standard.setValue(email, forKey: "email")
-                       UserDefaults.standard.setValue("\(firstName) \(lastName)", forKey: "name")
+        DatabaseManager.shared.userExists(with: email, completion: {[weak self] exists in
+            guard let strongSelf = self else{
+                return
+            }
+            guard !exists else{
+                strongSelf.alertLoginError(message: "your account is aready exists.")
+                //user already exist
+                return
+            }
+            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
+                
+                
+                guard authResult != nil, error == nil else {
+                    print("Error cureating user", error)
+                    return
+                }
+                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                
+            })
         })
+        
+        
+        
     }
-    @objc func alertLoginError(){
-        let alert  = UIAlertController(title: "Woops", message: "please enter a infomation to create a new account", preferredStyle: .alert)
+    @objc func alertLoginError(message : String = "please add infomation to regist an account"){
+        let alert  = UIAlertController(title: "Woops", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismis", style: .cancel, handler: nil))
         present(alert, animated: true)
     }
-
+    
 }
 extension RegisterController: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -233,3 +248,4 @@ extension RegisterController: UIImagePickerControllerDelegate, UINavigationContr
         picker.dismiss(animated: true, completion: nil)
     }
 }
+

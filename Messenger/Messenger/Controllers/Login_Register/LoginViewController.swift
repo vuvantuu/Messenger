@@ -99,21 +99,28 @@ class LoginViewController: UIViewController {
         emailField.resignFirstResponder()
         passField.resignFirstResponder()
         guard
-           let email = emailField.text,
-           let password = passField.text,
-           !email.isEmpty,
-           !password.isEmpty,
-           password.count >= 6 else {
-               alertLoginError()
-               return
+            let email = emailField.text,
+            let password = passField.text,
+            !email.isEmpty,
+            !password.isEmpty,
+            password.count >= 6 else {
+                alertLoginError()
+                return
         }
         //Firebase Log In
         FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { [weak self] authResult, error in
-                   guard let strongSelf = self else {
-                       return
-                   }
+            guard let strongSelf = self else{
+                return
+            }
+            guard let result = authResult, error == nil else {
+                print("Failed to log in user with email: \(email)")
+                return
+            }
+            
+            let user = result.user
+            print("login sucess full\(user)")
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
-        let user = result.user
     }
     @objc func alertLoginError(){
         let alert  = UIAlertController(title: "Woops", message: "please enter information to all field", preferredStyle: .alert)
