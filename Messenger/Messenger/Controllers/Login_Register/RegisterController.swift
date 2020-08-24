@@ -164,27 +164,19 @@ class RegisterController: UIViewController {
                 return
         }
         //Firebase register
-        DatabaseManager.shared.userExists(with: email, completion: {[weak self] exists in
-            guard let strongSelf = self else{
-                return
-            }
-            guard !exists else{
-                strongSelf.alertLoginError(message: "your account is aready exists.")
-                //user already exist
-                return
-            }
-            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
-                
-                
-                guard authResult != nil, error == nil else {
-                    print("Error cureating user", error)
-                    return
-                }
-                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
-                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
-                
-            })
-        })
+        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
+                        
+                        
+                        guard  let result = authResult, error == nil else {
+                            print("Error cureating user", error)
+                            return
+                        }
+                        let user = result.user
+                        print("abcdef \(user)")
+        //                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+        //                self?.navigationController?.dismiss(animated: true, completion: nil)
+                        
+                    })
         
         
         
