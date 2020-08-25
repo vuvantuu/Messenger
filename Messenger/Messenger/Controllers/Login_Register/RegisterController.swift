@@ -164,24 +164,30 @@ class RegisterController: UIViewController {
                 return
         }
         //Firebase register
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
-                        
-                        
-                        guard  let result = authResult, error == nil else {
-                            print("Error cureating user", error)
-                            return
-                        }
-                        let user = result.user
-                        print("abcdef \(user)")
-        //                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
-        //                self?.navigationController?.dismiss(animated: true, completion: nil)
-                        
-                    })
-        
-        
-        
+        DatabaseManager.shared.userExists(with: email, completion: { [weak self] exists in
+           
+            
+            guard let strongSelf = self else{
+                
+                return
+            }
+            guard !exists else{
+                strongSelf.alertLoginError(message: "look like a user account for that email already exists")
+                return
+            }
+            
+            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
+                
+                guard  authResult != nil, error == nil else {
+                    print("Create a user with email: \(email)")
+                    return
+                }
+                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            })
+        })
     }
-    @objc func alertLoginError(message : String = "please add infomation to regist an account"){
+    func alertLoginError(message : String = "please add infomation to regist an account"){
         let alert  = UIAlertController(title: "Woops", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismis", style: .cancel, handler: nil))
         present(alert, animated: true)

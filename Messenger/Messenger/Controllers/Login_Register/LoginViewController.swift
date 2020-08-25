@@ -95,7 +95,7 @@ class LoginViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     @objc func logBtnTap(){
-        print("ahyvgyudgyu")
+       
         emailField.resignFirstResponder()
         passField.resignFirstResponder()
         guard
@@ -119,6 +119,7 @@ class LoginViewController: UIViewController {
             
             let user = result.user
             print("login sucess full\(user)")
+          
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
     }
