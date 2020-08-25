@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -29,7 +30,7 @@ class LoginViewController: UIViewController {
         button.permissions = ["email, public_profile"]
         return button
     }()
-
+    private let googleLoginButton = GIDSignInButton()
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.clipsToBounds = true
@@ -71,9 +72,19 @@ class LoginViewController: UIViewController {
         return passTF
         
     }()
-    
+    private var loginObserver: NSObjectProtocol?
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loginObserver = NotificationCenter.default.addObserver(forName: .didLogInNotification, object: nil, queue: .main, using: { [weak self]
+            _ in
+            guard let strongSelf = self else{
+                return
+            }
+             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+        })
+        
+        GIDSignIn.sharedInstance()?.presentingViewController =  self
         emailField.delegate = self
         passField.delegate = self
         FBButton.delegate = self
@@ -88,6 +99,13 @@ class LoginViewController: UIViewController {
         scrollView.addSubview(passField)
         scrollView.addSubview(loginButton)
         scrollView.addSubview(FBButton)
+        scrollView.addSubview(googleLoginButton)
+    }
+    
+    deinit {
+        if let observer = loginObserver{
+            NotificationCenter.default.removeObserver(loginObserver)
+        }
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -99,9 +117,11 @@ class LoginViewController: UIViewController {
         passField.frame = CGRect(x: 30, y: emailField.bottom + 10, width: scrollView.width - 60, height: 52)
         loginButton.frame = CGRect(x: 30, y: passField.bottom + 10, width: scrollView.width - 60, height: 52)
         FBButton.frame = CGRect(x: 30, y: loginButton.bottom + 10, width: scrollView.width - 60, height: 52)
-        FBButton.layer.cornerRadius = 12
         FBButton.center = scrollView.center
         FBButton.frame.origin.y = loginButton.bottom + 20
+        googleLoginButton.frame = CGRect(x: 30, y: FBButton.bottom + 10, width: scrollView.width - 60, height: 52)
+        googleLoginButton.center = scrollView.center
+        googleLoginButton.frame.origin.y = FBButton.bottom + 20
     }
     @objc func didTapRegister (){
         let vc = RegisterController()
