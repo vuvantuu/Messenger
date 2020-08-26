@@ -70,11 +70,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             let lastName = user.profile.familyName else {
                 return
         }
-        
+              
+               UserDefaults.standard.set(email, forKey: "email")
+               UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
         DatabaseManager.shared.userExists(with: email, completion: { exists in
             if !exists {
                 // inserts to database
-                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                
+                let chatUser = ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email)
+                
+                DatabaseManager.shared.insertUser(with: chatUser, completion: { success in
+
+                    if success{
+                        //upload image
+                        
+                        if user.profile.hasImage {
+                            guard let url = user.profile.imageURL(withDimension: 200) else {
+                                return
+                            }
+
+                            URLSession.shared.dataTask(with: url, completionHandler: { data, _, _ in
+                                guard let data = data else {
+                                    return
+                                }
+
+                                let filename = chatUser.profilePictureFileName
+                                StorageManager.shared.uploadProfilePicture(with: data, fileName: filename, completion: { result in
+                                    switch result {
+                                    case .success(let downloadUrl):
+                                        UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
+                                        print(downloadUrl)
+                                    case .failure(let error):
+                                        print("Storage maanger error: \(error)")
+                                    }
+                                })
+                            }).resume()
+                        }
+                    }
+                })
             }
         })
         guard let authentication = user.authentication else {
@@ -87,7 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                                 
                                 guard authResult != nil, error == nil else {
                                   if let error = error{
-                                       print("Failed to log in FB user \(error)")
+                                       print("Failed to log in GG user \(error)")
                                   }
                                    
                                     return
@@ -98,7 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                   })
     }
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-        print("Goolge")
+        print("Goolge user was disconnected")
     }
     
 }
