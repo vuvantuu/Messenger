@@ -10,8 +10,11 @@ target 'Messenger' do
 	pod 'Firebase/Auth'
 	pod 'Firebase/Database'
 
-    	pod 'FBSDKLoginKit'
-  # Google for Messenger 
-	pod 'GoogleSignIn'
+  pod 'FBSDKLoginKit'
+  pod 'GoogleSignIn'
+	pod 'MessageKit'
+	pod 'JGProgressHUD'
+	pod 'RealmSwift'
+  pod 'SDWebImage'
 
 end
