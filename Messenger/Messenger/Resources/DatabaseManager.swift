@@ -14,6 +14,8 @@ final class DatabaseManager{
     
     private let database = Database.database().reference()
     
+    
+    
     static func safeEmail(emailAddress: String) -> String {
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
@@ -37,6 +39,7 @@ extension DatabaseManager{
         })
         
     }
+    
     //insert new user to database
     public func insertUser(with user: ChatAppUser, completion: @escaping (Bool) -> Void){
            database.child(user.safeEmail).setValue([
@@ -51,6 +54,22 @@ extension DatabaseManager{
                 completion(true)
            })
        }
+    public func getAllUsers(completion: @escaping (Result<[[String: String]], Error>)->
+        Void){
+        database.child("users").observeSingleEvent(of: .value, with: {
+            snapshot in
+            
+            guard let value = snapshot.value as? [[String:String]] else {
+                completion (.failure(DatabaseError.failedToFetch))
+                return
+            }
+            completion(.success(value))
+        })
+    }
+    public enum DatabaseError: Error{
+        case failedToFetch
+        
+    }
 }
 struct ChatAppUser{
     let firstName: String

@@ -21,6 +21,7 @@
 		904E88A024F14A100075D151 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904E889F24F14A100075D151 /* Extensions.swift */; };
 		9052C59C24F258B500C76E08 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9052C59B24F258B500C76E08 /* GoogleService-Info.plist */; };
 		9052C5A224F36BCD00C76E08 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9052C5A124F36BCD00C76E08 /* DatabaseManager.swift */; };
+		9052C65B24FE32FE00E178C5 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9052C65A24FE32FE00E178C5 /* SearchResult.swift */; };
 		9052FB1024F5F2F700608F5F /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9052FB0F24F5F2F700608F5F /* ChatViewController.swift */; };
 		9052FB1224F608CA00608F5F /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9052FB1124F608CA00608F5F /* NewConversationViewController.swift */; };
 		9052FB1424F6176000608F5F /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9052FB1324F6176000608F5F /* StorageManager.swift */; };
@@ -48,6 +49,7 @@
 		9052C59B24F258B500C76E08 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9052C59D24F2824000C76E08 /* Messenger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Messenger.entitlements; sourceTree = "<group>"; };
 		9052C5A124F36BCD00C76E08 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		9052C65A24FE32FE00E178C5 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		9052FB0F24F5F2F700608F5F /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		9052FB1124F608CA00608F5F /* NewConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
 		9052FB1324F6176000608F5F /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 		904E888924F106CE0075D151 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9052C65A24FE32FE00E178C5 /* SearchResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				904E88A024F14A100075D151 /* Extensions.swift in Sources */,
 				9052FB1224F608CA00608F5F /* NewConversationViewController.swift in Sources */,
 				904E887824F1056A0075D151 /* ConversationViewController.swift in Sources */,
+				9052C65B24FE32FE00E178C5 /* SearchResult.swift in Sources */,
 				904E889924F1175C0075D151 /* ProfileViewController.swift in Sources */,
 				904E887424F1056A0075D151 /* AppDelegate.swift in Sources */,
 				9052FB1024F5F2F700608F5F /* ChatViewController.swift in Sources */,
