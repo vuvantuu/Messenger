@@ -24,17 +24,17 @@ class ProfileViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.tableHeaderView = createTableHeader()
         
-       
         // Do any additional setup after loading the view.
     }
     func createTableHeader() -> UIView?{
-               guard let email = UserDefaults.standard.value(forKey: "email") as? String else{
-                   return nil
-               }
-               let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
-               let filename = safeEmail + "_profile_picture.png"
-               let path = "images/" + filename
+        guard let email = UserDefaults.standard.value(forKey: "email") as? String else{
+            return nil
+        }
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+        let filename = safeEmail + "_profile_picture.png"
+        let path = "images/" + filename
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 300))
         
         headerView.backgroundColor = .link
@@ -43,20 +43,33 @@ class ProfileViewController: UIViewController {
         
         headerView.contentMode = .scaleAspectFill
         headerView.layer.borderWidth = 3
-        headerView.backgroundColor = .white
+        headerView.backgroundColor = .green
+        headerView.layer.cornerRadius = imageView.width/2
         headerView.layer.masksToBounds = true
         headerView.layer.borderColor = UIColor.white.cgColor
-        StorageManager.shared.dowloadURL(for: path, completion:{ result in
-                switch result{
-                case .success(let url):
-                case .failure(let error):
-                    print("failed to get dowload url\(error)")
-                }
+        StorageManager.shared.dowloadURL(for: path, completion:{ [weak self] result in
+            switch result{
+            case .success(let url):
+                self?.dowloadImage(imageView: imageView, url: url)
+            case .failure(let error):
+                print("failed to get dowload url\(error)")
+            }
         })
         view.addSubview(headerView)
         return headerView
-           
-     }
+        
+    }
+    func dowloadImage(imageView: UIImageView, url: URL){
+        URLSession.shared.dataTask(with: url, completionHandler: {data, _, error in
+            guard let data = data , error == nil else {
+                return
+            }
+            DispatchQueue.main.async {
+                let image = UIImage(data:data)
+                imageView.image = image
+            }
+        }).resume()
+    }
     func setupTableView() {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false

@@ -21,7 +21,7 @@ final class DatabaseManager{
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
         return safeEmail
     }
-   
+    
 }
 //MARK: - Account Mgmt
 extension DatabaseManager{
@@ -42,18 +42,54 @@ extension DatabaseManager{
     
     //insert new user to database
     public func insertUser(with user: ChatAppUser, completion: @escaping (Bool) -> Void){
-           database.child(user.safeEmail).setValue([
-               "first_name": user.firstName,
-               "last_name": user.lastName
+        database.child(user.safeEmail).setValue([
+            "first_name": user.firstName,
+            "last_name": user.lastName
             ], withCompletionBlock: { error, _ in
                 guard error == nil else{
                     print("failed in write to database")
                     completion(false)
                     return
                 }
-                completion(true)
-           })
-       }
+                self.database.child("users").observeSingleEvent(of: .value, with: {snapshot in
+                    if var usersCollection = snapshot.value as? [[String:String]]{
+                        //append to user dictionary
+                        let newElement = [
+                            "name": user.firstName + "" + user.lastName,
+                            "email" : user.safeEmail
+                        ]
+                        usersCollection.append(newElement)
+                        self.database.child("users").setValue(usersCollection, withCompletionBlock: { error, _ in
+                            guard error == nil else{
+                                completion(false)
+                                return
+                                
+                            }
+                            completion(true)
+                            
+                        })
+                    }
+                    else {
+                        //create that array
+                        let newCollection: [[String: String]] = [
+                            [
+                                "name": user.firstName + "" + user.lastName,
+                                "email" : user.safeEmail
+                            ]
+                        ]
+                        self.database.child("users").setValue(newCollection, withCompletionBlock: { error, _ in
+                            guard error == nil else{
+                                completion(true)
+                                return
+                            }
+                            
+                        })
+                    }
+                })
+                
+                //                completion(true)
+        })
+    }
     public func getAllUsers(completion: @escaping (Result<[[String: String]], Error>)->
         Void){
         database.child("users").observeSingleEvent(of: .value, with: {
