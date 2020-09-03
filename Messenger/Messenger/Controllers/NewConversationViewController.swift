@@ -11,8 +11,7 @@ import JGProgressHUD
 
 class NewConversationViewController: UIViewController {
    
-    
-
+    public var completion: (([String: String]) -> (Void))?
     private let spinner  = JGProgressHUD(style: .dark)
     
     private var users = [[String:String]]()
@@ -76,7 +75,7 @@ extension NewConversationViewController: UISearchBarDelegate{
         guard let text = searchBar.text, !text.replacingOccurrences(of: "", with: "").isEmpty else {
             return
         }
-        
+        self.searchUsers(query: text)
         searchBar.resignFirstResponder()
         self.searchUsers(query: text)
         results.removeAll()
@@ -87,6 +86,7 @@ extension NewConversationViewController: UISearchBarDelegate{
         //if it does: filter
         if hasFetched{
             // if it does: filter
+            filterUsers(with: query)
         }
         else{
             // if not it fetch then does: filter
@@ -152,6 +152,15 @@ extension NewConversationViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         //start conversation
+        
+        let targetUserData = results[indexPath.row]
+        
+        dismiss(animated: true, completion: {
+            [weak self] in
+            self?.completion?(targetUserData)
+        })
+        
+        
     }
     
 }
